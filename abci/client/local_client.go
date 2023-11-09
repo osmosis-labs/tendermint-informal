@@ -1,6 +1,7 @@
 package abcicli
 
 import (
+	"fmt"
 	types "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/service"
 	tmsync "github.com/tendermint/tendermint/libs/sync"
@@ -109,6 +110,7 @@ func (app *localClient) CheckTxAsync(req types.RequestCheckTx) *ReqRes {
 }
 
 func (app *localClient) QueryAsync(req types.RequestQuery) *ReqRes {
+	fmt.Println("localClient.QueryAsync", req)
 	app.mtx.Lock()
 	defer app.mtx.Unlock()
 
@@ -250,6 +252,7 @@ func (app *localClient) CheckTxSync(req types.RequestCheckTx) (*types.ResponseCh
 }
 
 func (app *localClient) QuerySync(req types.RequestQuery) (*types.ResponseQuery, error) {
+	fmt.Println("localClient.QuerySync", req)
 	app.mtx.Lock()
 	defer app.mtx.Unlock()
 
