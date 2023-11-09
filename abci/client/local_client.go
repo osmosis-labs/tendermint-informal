@@ -115,6 +115,7 @@ func (app *localClient) QueryAsync(req types.RequestQuery) *ReqRes {
 	defer app.mtx.Unlock()
 
 	res := app.Application.Query(req)
+	fmt.Println("localClient.QueryAsync res", res)
 	return app.callback(
 		types.ToRequestQuery(req),
 		types.ToResponseQuery(res),
@@ -257,6 +258,7 @@ func (app *localClient) QuerySync(req types.RequestQuery) (*types.ResponseQuery,
 	defer app.mtx.Unlock()
 
 	res := app.Application.Query(req)
+	fmt.Println("localClient.QuerySync res", res)
 	return &res, nil
 }
 
