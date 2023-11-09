@@ -1,10 +1,11 @@
 package abcicli
 
 import (
-	"fmt"
 	types "github.com/tendermint/tendermint/abci/types"
+	"github.com/tendermint/tendermint/libs/log"
 	"github.com/tendermint/tendermint/libs/service"
 	tmsync "github.com/tendermint/tendermint/libs/sync"
+	"os"
 )
 
 var _ Client = (*localClient)(nil)
@@ -110,12 +111,13 @@ func (app *localClient) CheckTxAsync(req types.RequestCheckTx) *ReqRes {
 }
 
 func (app *localClient) QueryAsync(req types.RequestQuery) *ReqRes {
-	fmt.Println("localClient.QueryAsync", req)
+	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
+	logger.Info("localClient.QueryAsync", "req", req)
 	app.mtx.Lock()
 	defer app.mtx.Unlock()
 
 	res := app.Application.Query(req)
-	fmt.Println("localClient.QueryAsync res", res)
+	logger.Info("localClient.QueryAsync res", "res", res)
 	return app.callback(
 		types.ToRequestQuery(req),
 		types.ToResponseQuery(res),
@@ -253,12 +255,13 @@ func (app *localClient) CheckTxSync(req types.RequestCheckTx) (*types.ResponseCh
 }
 
 func (app *localClient) QuerySync(req types.RequestQuery) (*types.ResponseQuery, error) {
-	fmt.Println("localClient.QuerySync", req)
+	logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
+	logger.Info("localClient.QuerySync", "req", req)
 	app.mtx.Lock()
 	defer app.mtx.Unlock()
 
 	res := app.Application.Query(req)
-	fmt.Println("localClient.QuerySync res", res)
+	logger.Info("localClient.QuerySync res", "res", res)
 	return &res, nil
 }
 
